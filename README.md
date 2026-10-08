@@ -13,6 +13,8 @@ Sin dependencias: solo `bash` y `grep` (macOS, Linux, WSL o Git Bash). Incluye p
 
 Claude Code ejecuta los hooks `PreToolUse` antes de cada herramienta y les pasa el evento en JSON por stdin. Si el hook sale con **código 2**, la acción se bloquea y el texto de stderr se le devuelve a Claude como motivo, así que Claude se corrige solo (por ejemplo, usa una variable de entorno en vez de pegar la clave).
 
+Explicación paso a paso: [3 hooks de Claude Code que evitan desastres (dev.to)](https://dev.to/luijhy_michaelguerraflo/3-hooks-de-claude-code-que-evitan-desastres-con-codigo-2h3d).
+
 ## Instalación
 
 ```bash
