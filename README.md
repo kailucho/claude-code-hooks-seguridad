@@ -1,11 +1,13 @@
 # Hooks de seguridad para Claude Code (en español)
 
+[![tests](https://github.com/kailucho/claude-code-hooks-seguridad/actions/workflows/tests.yml/badge.svg)](https://github.com/kailucho/claude-code-hooks-seguridad/actions/workflows/tests.yml)
+
 Dos hooks gratuitos que frenan a Claude Code **antes** de que haga algo irreversible:
 
 - **`bloquear-comandos-peligrosos.sh`** — bloquea `rm -rf /`, `rm -rf ~`, `git push --force` (permite `--force-with-lease`), `git reset --hard`, `git clean -f`, `DROP TABLE`, `TRUNCATE TABLE`, `mkfs`, `dd ... of=/dev/`, `chmod -R 777`, fork bombs y `curl ... | bash`.
 - **`detectar-secretos.sh`** — impide escribir en archivos claves de AWS, Anthropic, OpenAI, GitHub, Slack, Stripe, Google, claves privadas y JWT.
 
-Sin dependencias: solo `bash` y `grep` (macOS, Linux, WSL o Git Bash). Incluye pruebas.
+Sin dependencias: solo `bash` y `grep` (macOS, Linux, WSL o Git Bash). Incluye pruebas que corren en CI en Linux y macOS, y están verificados dentro de Claude Code 2.1.x: Claude recibe el motivo del bloqueo y lo explica en vez de ejecutar el comando.
 
 ## Cómo funcionan
 

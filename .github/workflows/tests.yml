@@ -1,0 +1,18 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  hooks:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probar hooks
+        run: bash tests/test-hooks.sh
+      - name: Validar settings.json
+        run: python3 -m json.tool .claude/settings.json > /dev/null
