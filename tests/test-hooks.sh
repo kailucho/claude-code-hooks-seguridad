@@ -25,6 +25,14 @@ esperar 0 $h "$(bash_cmd 'rm -rf node_modules')"              "permite rm -rf no
 esperar 0 $h "$(bash_cmd 'git push --force-with-lease')"      "permite --force-with-lease"
 esperar 0 $h "$(bash_cmd 'git push -u origin feat/x')"        "permite git push normal"
 esperar 0 $h "$(bash_cmd 'npm test')"                         "permite npm test"
+esperar 2 $h "$(bash_cmd 'git push origin +main')"                         "bloquea push con refspec + (+main)"
+esperar 2 $h "$(bash_cmd 'git reset -q --hard HEAD~1')"                    "bloquea reset -q --hard"
+esperar 2 $h "$(bash_cmd 'git -C repo push --force')"                      "bloquea git -C repo push --force"
+esperar 2 $h "$(bash_cmd 'git push -uf origin x')"                         "bloquea push -uf"
+esperar 2 $h "$(bash_cmd 'git clean -d -f')"                               "bloquea clean -d -f"
+esperar 0 $h "$(bash_cmd 'git status && git push origin main')"            "permite status && push normal"
+esperar 0 $h "$(bash_cmd 'git push -u origin feat/x+y')"                   "permite rama con + en el nombre"
+esperar 0 $h "$(bash_cmd 'git reset --soft HEAD~1')"                       "permite reset --soft"
 
 h=detectar-secretos.sh
 esperar 2 $h "$(write_c 'const k = \"AKIAABCDEFGHIJKLMNOP\"')"                    "bloquea clave AWS"

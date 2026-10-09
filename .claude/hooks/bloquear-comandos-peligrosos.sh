@@ -8,9 +8,11 @@ entrada="$(cat)"
 
 patrones=(
   'rm[[:space:]]+-[a-zA-Z]*r[a-zA-Z]*f?[a-zA-Z]*[[:space:]]+(/|~|\$HOME|\*)([[:space:]"]|$)'
-  'git[[:space:]]+push[[:space:]].*(--force([^-]|$)|-f([[:space:]"]|$))'
-  'git[[:space:]]+reset[[:space:]]+--hard'
-  'git[[:space:]]+clean[[:space:]]+-[a-zA-Z]*f'
+  # git: busca el subcomando en cualquier posición del mismo comando (git -C dir push ...)
+  # push forzado: --force (no --force-with-lease), -f combinado (-uf) o refspec con + (origin +main)
+  'git[^;&|]*[[:space:]]push([[:space:]][^;&|]*)?[[:space:]](--force([^-]|$)|-[a-zA-Z]*f[a-zA-Z]*([[:space:]"]|$)|\+[^[:space:]"]+)'
+  'git[^;&|]*[[:space:]]reset([[:space:]][^;&|]*)?[[:space:]]--hard'
+  'git[^;&|]*[[:space:]]clean([[:space:]][^;&|]*)?[[:space:]]-[a-zA-Z]*f'
   'DROP[[:space:]]+(TABLE|DATABASE|SCHEMA)'
   'TRUNCATE[[:space:]]+TABLE'
   'mkfs\.'

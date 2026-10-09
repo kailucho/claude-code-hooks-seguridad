@@ -3,7 +3,7 @@
 [![tests](https://github.com/kailucho/claude-code-hooks-seguridad/actions/workflows/tests.yml/badge.svg)](https://github.com/kailucho/claude-code-hooks-seguridad/actions/workflows/tests.yml)
 
 
-> 🇬🇧 **English:** two free, dependency-free bash `PreToolUse` hooks for Claude Code. One blocks destructive commands before they run (`rm -rf /`, `git push --force` while allowing `--force-with-lease`, `git reset --hard`, `git clean -f`, `DROP TABLE`, `curl | bash`…); the other blocks writing credentials to files (AWS, Anthropic, OpenAI, GitHub, Stripe, Slack, Google keys, private keys, JWTs). Exit code 2 makes Claude Code block the tool call and feeds the reason back to Claude, so it explains instead of retrying. Install: copy `.claude/hooks/` into your project, `chmod +x` them and merge the `hooks` block from [`.claude/settings.json`](.claude/settings.json). Run `bash tests/test-hooks.sh` to test. Block messages are in Spanish; edit the `echo` lines to change them. Want the full kit (6 skills, 4 hooks, CLAUDE.md templates, presets) in English or Spanish? → [luijhy.gumroad.com](https://luijhy.gumroad.com)
+> 🇬🇧 **English:** two free, dependency-free bash `PreToolUse` hooks for Claude Code. One blocks destructive commands before they run (`rm -rf /`, `git push --force` while allowing `--force-with-lease`, `git reset --hard`, `git clean -f`, `DROP TABLE`, `curl | bash`…); the other blocks writing credentials to files (AWS, Anthropic, OpenAI, GitHub, Stripe, Slack, Google keys, private keys, JWTs). These are an early warning: also protect `main` on the remote with force pushes blocked. Exit code 2 makes Claude Code block the tool call and feeds the reason back to Claude, so it explains instead of retrying. Install: copy `.claude/hooks/` into your project, `chmod +x` them and merge the `hooks` block from [`.claude/settings.json`](.claude/settings.json). Run `bash tests/test-hooks.sh` to test. Block messages are in Spanish; edit the `echo` lines to change them. Want the full kit (6 skills, 4 hooks, CLAUDE.md templates, presets) in English or Spanish? → [luijhy.gumroad.com](https://luijhy.gumroad.com)
 >
 > Unofficial; not affiliated with Anthropic.
 
@@ -36,6 +36,12 @@ Luego agrega el bloque `hooks` de [`.claude/settings.json`](.claude/settings.jso
 bash tests/test-hooks.sh
 echo '{"tool_input":{"command":"git reset --hard"}}' | .claude/hooks/bloquear-comandos-peligrosos.sh; echo $?   # → 2
 ```
+
+## Defensa en capas
+
+Un hook con expresiones regulares es un **aviso temprano**, no una garantía: siempre puede haber una forma de escribir el comando que no coincida con el patrón. Para lo irreversible, pon el bloqueo real donde el agente no lo pueda editar: **protección de rama en el remoto** (GitHub → Settings → Branches/Rulesets → proteger `main` con *Block force pushes*, que viene activado por defecto en las ramas protegidas). Así, si el regex se queda corto, el push rebota en el servidor.
+
+Gracias a un lector de dev.to que encontró `git push origin +main` y `git reset -q --hard` pasando el filtro; desde la v0.1.1 están cubiertos (junto con `git -C dir push --force`, `push -uf` y `clean -d -f`) y tienen pruebas.
 
 ## Personalizar
 
