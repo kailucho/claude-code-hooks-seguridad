@@ -2,6 +2,11 @@
 
 [![tests](https://github.com/kailucho/claude-code-hooks-seguridad/actions/workflows/tests.yml/badge.svg)](https://github.com/kailucho/claude-code-hooks-seguridad/actions/workflows/tests.yml)
 
+
+> 🇬🇧 **English:** two free, dependency-free bash `PreToolUse` hooks for Claude Code. One blocks destructive commands before they run (`rm -rf /`, `git push --force` while allowing `--force-with-lease`, `git reset --hard`, `git clean -f`, `DROP TABLE`, `curl | bash`…); the other blocks writing credentials to files (AWS, Anthropic, OpenAI, GitHub, Stripe, Slack, Google keys, private keys, JWTs). Exit code 2 makes Claude Code block the tool call and feeds the reason back to Claude, so it explains instead of retrying. Install: copy `.claude/hooks/` into your project, `chmod +x` them and merge the `hooks` block from [`.claude/settings.json`](.claude/settings.json). Run `bash tests/test-hooks.sh` to test. Block messages are in Spanish; edit the `echo` lines to change them. Want the full kit (6 skills, 4 hooks, CLAUDE.md templates, presets) in English or Spanish? → [luijhy.gumroad.com](https://luijhy.gumroad.com)
+>
+> Unofficial; not affiliated with Anthropic.
+
 Dos hooks gratuitos que frenan a Claude Code **antes** de que haga algo irreversible:
 
 - **`bloquear-comandos-peligrosos.sh`** — bloquea `rm -rf /`, `rm -rf ~`, `git push --force` (permite `--force-with-lease`), `git reset --hard`, `git clean -f`, `DROP TABLE`, `TRUNCATE TABLE`, `mkfs`, `dd ... of=/dev/`, `chmod -R 777`, fork bombs y `curl ... | bash`.
